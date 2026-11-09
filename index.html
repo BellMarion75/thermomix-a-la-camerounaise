@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thermomix à la Camerounaise – Recettes</title>
+<style>
+:root{
+  --bg:#fbf6ee; --card:#fffdf9; --ink:#2b1d14; --muted:#7a6656;
+  --green:#1f6b45; --green-d:#174f34; --red:#c0392b; --sun:#e9a91f;
+  --line:#ecdfcd; --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.15;margin:0}
+a{color:var(--green)}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(251,246,238,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:19px;text-decoration:none;color:var(--ink)}
+.flag{display:inline-flex;width:28px;height:20px;border-radius:4px;overflow:hidden}
+.flag i{flex:1}.flag i:nth-child(1){background:var(--green)}.flag i:nth-child(2){background:var(--red);position:relative}.flag i:nth-child(3){background:var(--sun)}
+.flag i:nth-child(2)::after{content:"★";position:absolute;inset:0;display:grid;place-items:center;color:var(--sun);font-size:9px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:none;padding:6px 12px;font-weight:700;color:var(--muted)}
+.lang button.on{background:var(--ink);color:#fff}
+
+/* hero */
+.hero{padding:56px 0 36px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(34px,5vw,56px)}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero p{color:var(--muted);font-size:18px;max-width:540px}
+.pill{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px;margin-bottom:16px}
+.hero-art{aspect-ratio:1;border-radius:50%;background:
+  radial-gradient(circle at 35% 35%,#ffd77a 0 18%,transparent 19%),
+  radial-gradient(circle at 62% 58%,#d9822b 0 16%,transparent 17%),
+  radial-gradient(circle at 40% 70%,#e9a91f 0 12%,transparent 13%),
+  radial-gradient(circle at 68% 30%,#c0392b 0 9%,transparent 10%),
+  radial-gradient(circle,#2f8a5b 0 62%,#1f6b45 63% 100%);
+  box-shadow:0 30px 60px -30px rgba(31,107,69,.6)}
+.steps{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:15px}
+.steps b{color:var(--ink)}
+
+/* filters + grid */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 22px}
+.filters button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:500}
+.filters button.on{background:var(--green);border-color:var(--green);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;padding-bottom:60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s;cursor:pointer;text-align:left;padding:0;color:inherit}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(43,29,20,.45)}
+.thumb{height:160px;display:grid;place-items:center;font-size:64px;overflow:hidden}
+.thumb img,.d-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-size:21px}
+.meta{color:var(--muted);font-size:14px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px}
+.price{font-weight:700;font-size:18px}
+.cta{background:var(--ink);color:#fff;border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px}
+
+/* detail */
+#detail{display:none;padding:28px 0 70px}
+.back{border:0;background:none;color:var(--green);font-weight:700;padding:0;margin-bottom:18px}
+.detail{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start}
+.d-hero{height:300px;border-radius:var(--radius);display:grid;place-items:center;font-size:110px;margin-bottom:24px;overflow:hidden}
+.detail h1{font-size:clamp(30px,4vw,44px);margin-bottom:8px}
+.desc{color:var(--muted);font-size:17px}
+.section{margin-top:30px}
+.section h2{font-size:24px;margin-bottom:12px}
+.ing{list-style:none;padding:0;margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.ing li{display:flex;justify-content:space-between;gap:12px;padding:11px 16px;border-top:1px solid var(--line)}
+.ing li:first-child{border-top:0}
+.ing li span:last-child{color:var(--muted);white-space:nowrap}
+.locked{position:relative}
+.locked .ghost{filter:blur(5px);user-select:none;pointer-events:none;opacity:.6}
+.ghost .ln{height:12px;border-radius:6px;background:#d8c9b4;margin:6px 0}
+.lock-over{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px}
+.lock-over div{background:rgba(255,253,249,.94);border:1px solid var(--line);border-radius:14px;padding:14px 18px;font-weight:700;box-shadow:0 10px 30px -18px rgba(0,0,0,.4)}
+.ghost-step{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.ghost-step:first-child{border-top:0}
+.ghost-step .n{width:26px;height:26px;border-radius:50%;background:#d8c9b4;flex:none}
+.ghost-step .t{flex:1}
+.box{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+
+.buy{position:sticky;top:84px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 20px 50px -34px rgba(43,29,20,.5)}
+.buy .big{font-family:Georgia,"Times New Roman",serif;font-size:42px;font-weight:700}
+.buy ul{padding-left:18px;color:var(--muted);margin:12px 0 18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:12px;padding:13px 16px;font-weight:700;font-size:16px;text-decoration:none;margin-top:10px}
+.btn-pp{background:#ffc439;color:#111}
+.btn-iban{background:var(--green);color:#fff}
+.btn-iban:hover{background:var(--green-d)}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.facts{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:14px}
+.fact b{display:block;font-size:16px}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(43,29,20,.55);display:none;place-items:center;z-index:50;padding:18px}
+.modal.open{display:grid}
+.sheet{background:var(--card);border-radius:20px;max-width:460px;width:100%;padding:24px;max-height:92vh;overflow:auto}
+.sheet h3{font-size:24px;margin-bottom:6px}
+.kv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:14px 0}
+.kv div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}
+.kv div:first-child{border-top:0}
+.kv span:first-child{color:var(--muted)}
+.kv b{font-family:ui-monospace,monospace;word-break:break-all;text-align:right}
+.copy{border:1px solid var(--line);background:#fff;border-radius:8px;padding:2px 8px;font-size:12px;margin-left:6px}
+label{display:block;font-weight:700;font-size:14px;margin-top:12px}
+input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;margin-top:4px;background:#fff}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.ok{background:#e8f4ec;border:1px solid #b9dcc6;border-radius:12px;padding:12px 14px;margin-top:14px}
+.x{float:right;border:0;background:none;font-size:22px;line-height:1;color:var(--muted)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:13px}.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.legal h4{margin:14px 0 4px;font-size:15px}.legal p{margin:0 0 8px;font-size:14px;color:#4a3a2e}
+.consent{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:13px;color:var(--muted);margin-top:12px}.consent input{width:auto;margin-top:3px}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr}.hero-art{display:none}
+  .detail{grid-template-columns:1fr}.buy{position:static}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#" onclick="showHome();return false;"><span class="flag"><i></i><i></i><i></i></span><span>Thermomix à la Camerounaise</span></a>
+    <div class="lang"><button data-l="de">DE</button><button data-l="en">EN</button><button data-l="fr" class="on">FR</button></div>
+  </div>
+</header>
+
+<main>
+  <div id="home">
+    <section class="wrap hero">
+      <div>
+        <span class="pill" data-t="pill"></span>
+        <h1 data-t="h1"></h1>
+        <p data-t="lead"></p>
+        <div class="steps">
+          <span>① <b data-t="s1"></b></span>
+          <span>② <b data-t="s2"></b></span>
+          <span>③ <b data-t="s3"></b></span>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true"></div>
+    </section>
+    <section class="wrap">
+      <div class="filters" id="filters"></div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </div>
+
+  <div id="detail" class="wrap"></div>
+</main>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Thermomix à la Camerounaise</span>
+    <span><a href="#" data-legal="imprint" data-t="imprint"></a> · <a href="#" data-legal="privacy" data-t="privacy"></a> · <a href="#" data-legal="withdraw" data-t="withdraw"></a> · <a href="#" data-legal="terms" data-t="terms"></a></span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   EINSTELLUNGEN – hier deine echten Daten eintragen
+   ============================================================ */
+const SHOP = {
+  price: 5,                                   // Preis pro Rezept in Euro
+  paypalUrl: "https://www.paypal.com/qrcodes/p2pqrc/S4XMM2GJQ2YKS",  // PayPal-Zahlungslink (aus dem QR-Code)
+  paypalQr: "img/paypal-qr.png",
+  paypalMe: "monkamlaurence",                // PayPal.me-Name: Betrag wird automatisch eingetragen
+  ibanOwner: "Laurence Monkam",
+  iban: "DE61 5001 0517 5409 6638 77",
+  bic: "INGDDEFFXXX",
+  bank: "ING",
+  email: "bellmarion2020@gmail.com",               // hierhin kommen die Bestellungen
+  whatsapp: "491718267492"                   // optional, Nummer ohne + und Leerzeichen
+};
+
+/* ============================================================
+   REZEPTE – Vorschau (nur die ersten Zutaten sind sichtbar).
+   Das vollständige Rezept steht NICHT auf der Seite,
+   es wird nach Zahlungseingang als PDF verschickt.
+   ============================================================ */
+const RECIPES = [
+  /* Pro Rezept: name {fr,de,en}, time ("45 min", "1 h 30"), serves (Zahl), desc {fr,de,en},
+     ing = sichtbare Zutaten [{fr,de,en,q}], hidden = Anzahl versteckter Zutaten, steps = Anzahl Schritte,
+     cookidoo = true wenn es einen Cookidoo-Link gibt (der Link selbst steht NICHT hier). */
+  {"id": "beignets-de-farine", "cat": "snack", "emoji": "🍩", "bg": "#f6d28b", "img": "img/beignets-de-farine.jpg", "name": {"fr": "Beignets de farine", "de": "Mehl-Krapfen", "en": "Flour beignets"}, "time": "1 h", "serves": 6, "desc": {"fr": "Les beignets de farine classiques, pâte pétrie au Thermomix, moelleux à souhait.", "de": "Die klassischen Mehl-Krapfen: Teig im Thermomix geknetet, herrlich fluffig.", "en": "Classic flour beignets: dough kneaded in the Thermomix, wonderfully fluffy."}, "ing": [{"fr": "Farine", "de": "Mehl", "en": "Flour", "q": "500 g"}, {"fr": "Sucre", "de": "Zucker", "en": "Sugar", "q": "125 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": "375 g"}], "hidden": 3, "steps": 4, "cookidoo": true},
+  {"id": "beignets-mais", "cat": "snack", "emoji": "🌽", "bg": "#f3d77e", "img": "img/beignets-mais.jpg", "name": {"fr": "Beignets de maïs", "de": "Mais-Krapfen", "en": "Corn beignets"}, "time": "45 min", "serves": 4, "desc": {"fr": "Beignets de maïs aux bananes bien mûres, dorés et moelleux.", "de": "Mais-Krapfen mit sehr reifen Bananen, goldbraun und weich.", "en": "Corn beignets with very ripe bananas, golden and soft."}, "ing": [{"fr": "Farine de maïs", "de": "Maismehl", "en": "Maize flour", "q": "150 g"}, {"fr": "Bananes bien mûres", "de": "Sehr reife Bananen", "en": "Very ripe bananas", "q": {"fr": "8", "de": "8", "en": "8"}}, {"fr": "Farine de blé", "de": "Weizenmehl", "en": "Wheat flour", "q": "50 g"}], "hidden": 3, "steps": 3, "cookidoo": true},
+  {"id": "bouillie", "cat": "snack", "emoji": "🥣", "bg": "#f3e0a6", "name": {"fr": "Bouillie", "de": "Brei", "en": "Porridge"}, "time": "20 min", "serves": 2, "desc": {"fr": "La bouillie du matin, lisse et sans grumeaux grâce au Thermomix.", "de": "Der Frühstücksbrei: glatt und klümpchenfrei dank Thermomix.", "en": "The breakfast porridge: smooth and lump-free thanks to the Thermomix."}, "ing": [{"fr": "Farine pour bouillie", "de": "Breimehl", "en": "Porridge flour", "q": "200 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": "350 g"}, {"fr": "Sucre", "de": "Zucker", "en": "Sugar", "q": {"fr": "selon le goût", "de": "nach Geschmack", "en": "to taste"}}], "hidden": 0, "steps": 2, "cookidoo": false},
+  {"id": "condiments-simples", "cat": "condiment", "emoji": "🧄", "bg": "#e9dcc0", "name": {"fr": "Condiments simples", "de": "Einfache Würzmischung", "en": "Simple seasoning"}, "time": "", "serves": 0, "desc": null, "ing": [], "hidden": 0, "steps": 0, "cookidoo": false},
+  {"id": "condiments-tout-terrain-bien-epice", "cat": "condiment", "emoji": "🌶️", "bg": "#f0a58c", "name": {"fr": "Condiments tout-terrain bien épicés", "de": "Scharfe Allround-Würzmischung", "en": "Spicy all-purpose seasoning"}, "time": "1 h", "serves": 0, "yield": {"fr": "env. 2 l", "de": "ca. 2 l", "en": "approx. 2 l"}, "desc": {"fr": "Mon mélange d'épices camerounaises pour poisson braisé, poulet, bouillons… à congeler en portions.", "de": "Meine kamerunische Gewürzmischung für gegrillten Fisch, Hähnchen und Brühen, portionsweise einfrierbar.", "en": "My Cameroonian spice blend for grilled fish, chicken and broths, to freeze in portions."}, "ing": [{"fr": "Oignons", "de": "Zwiebeln", "en": "Onions", "q": "1 kg"}, {"fr": "Djansang", "de": "Djansang", "en": "Djansang", "q": "150 g"}, {"fr": "Rondelles", "de": "Rondelles (Gewürz)", "en": "Rondelles (spice)", "q": "70 g"}], "hidden": 7, "steps": 4, "cookidoo": false},
+  {"id": "couscous-de-manioc", "cat": "accomp", "emoji": "🍚", "bg": "#efe6d2", "name": {"fr": "Couscous de manioc", "de": "Maniok-Couscous", "en": "Cassava couscous"}, "time": "10 min", "serves": 2, "desc": {"fr": "Le couscous de manioc lisse et élastique, prêt en 2 minutes.", "de": "Glatter, elastischer Maniok-Couscous, fertig in 2 Minuten.", "en": "Smooth, stretchy cassava couscous, ready in 2 minutes."}, "ing": [{"fr": "Couscous de manioc", "de": "Maniok-Couscous", "en": "Cassava couscous", "q": "250 g"}, {"fr": "Eau bouillante", "de": "Kochendes Wasser", "en": "Boiling water", "q": "250 g"}, {"fr": "Eau chaude en plus", "de": "Zusätzliches heißes Wasser", "en": "Extra hot water", "q": {"fr": "au besoin", "de": "nach Bedarf", "en": "as needed"}}], "hidden": 0, "steps": 2, "cookidoo": false},
+  {"id": "croquettes", "cat": "snack", "emoji": "🥨", "bg": "#f1cf8f", "name": {"fr": "Croquettes", "de": "Croquettes", "en": "Croquettes"}, "time": "1 h", "serves": 6, "desc": {"fr": "Les croquettes croustillantes à la muscade, le snack préféré des fêtes.", "de": "Knusprige Croquettes mit Muskat, der beliebte Party-Snack.", "en": "Crunchy nutmeg croquettes, the favourite party snack."}, "ing": [{"fr": "Farine", "de": "Mehl", "en": "Flour", "q": "500 g"}, {"fr": "Sucre", "de": "Zucker", "en": "Sugar", "q": "150 g"}, {"fr": "Beurre mou", "de": "Weiche Butter", "en": "Soft butter", "q": "70 g"}], "hidden": 7, "steps": 4, "cookidoo": false},
+  {"id": "cuissons-a-vapeur", "cat": "accomp", "emoji": "♨️", "bg": "#d9e6e0", "name": {"fr": "Cuissons à vapeur", "de": "Dampfgaren", "en": "Steam cooking"}, "time": "1 h", "serves": 4, "desc": {"fr": "Mon tableau de cuisson au Varoma : bobolo, plantain, manioc, igname, taro, macabo.", "de": "Meine Garzeiten im Varoma: Bobolo, Kochbanane, Maniok, Yams, Taro, Macabo.", "en": "My Varoma cooking times: bobolo, plantain, cassava, yam, taro, macabo."}, "ing": [{"fr": "Eau", "de": "Wasser", "en": "Water", "q": {"fr": "500 g – 1 l", "de": "500 g – 1 l", "en": "500 g – 1 l"}}, {"fr": "Plantain, manioc ou igname", "de": "Kochbanane, Maniok oder Yams", "en": "Plantain, cassava or yam", "q": {"fr": "au choix", "de": "nach Wahl", "en": "of your choice"}}, {"fr": "Taro ou macabo", "de": "Taro oder Macabo", "en": "Taro or macabo", "q": {"fr": "au choix", "de": "nach Wahl", "en": "of your choice"}}], "hidden": 1, "steps": 2, "cookidoo": false},
+  {"id": "ekomba", "cat": "plat", "emoji": "🍃", "bg": "#c9d9a0", "name": {"fr": "Ekomba", "de": "Ekomba", "en": "Ekomba"}, "time": "2 h", "serves": 6, "desc": {"fr": "Gâteau de maïs frais à l'arachide et aux crevettes, cuit en papillotes.", "de": "Kuchen aus frischem Mais mit Erdnuss und Garnelen, in Päckchen gegart.", "en": "Fresh corn cake with peanut and shrimp, steamed in parcels."}, "ing": [{"fr": "Maïs (boîte, égoutté)", "de": "Mais (Dose, abgetropft)", "en": "Corn (canned, drained)", "q": "600 g"}, {"fr": "Pâte d'arachide", "de": "Erdnusspaste", "en": "Peanut paste", "q": "250 g"}, {"fr": "Crevettes séchées", "de": "Getrocknete Garnelen", "en": "Dried shrimp", "q": "30 g"}], "hidden": 2, "steps": 3, "cookidoo": false},
+  {"id": "eru", "cat": "plat", "emoji": "🌿", "bg": "#bfd8a3", "name": {"fr": "Eru", "de": "Eru", "en": "Eru"}, "time": "50 min", "serves": 6, "desc": {"fr": "L'Eru du Sud-Ouest avec épinards, huile rouge, viande et crevettes.", "de": "Eru aus dem Südwesten mit Spinat, Palmöl, Fleisch und Garnelen.", "en": "Eru from the South-West with spinach, red palm oil, meat and shrimp."}, "ing": [{"fr": "Eru", "de": "Eru", "en": "Eru", "q": "350 g"}, {"fr": "Épinards surgelés", "de": "Tiefkühl-Spinat", "en": "Frozen spinach", "q": "450 g"}, {"fr": "Viande précuite (peau, tripes, bœuf)", "de": "Vorgegartes Fleisch (Haut, Kutteln, Rind)", "en": "Pre-cooked meat (skin, tripe, beef)", "q": "500 g"}], "hidden": 5, "steps": 3, "cookidoo": false},
+  {"id": "gombo", "cat": "plat", "emoji": "🥒", "bg": "#b9d39a", "img": "img/gombo.jpg", "name": {"fr": "Gombo", "de": "Okra", "en": "Okra"}, "time": "10 min", "serves": 4, "desc": {"fr": "Gombo écrasé en 10 secondes, la base parfaite pour vos sauces gluantes.", "de": "In 10 Sekunden zerkleinerte Okra, die perfekte Basis für sämige Saucen.", "en": "Okra chopped in 10 seconds, the perfect base for slimy sauces."}, "ing": [{"fr": "Gombos", "de": "Okraschoten", "en": "Okra", "q": "600 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": "300 g"}], "hidden": 0, "steps": 2, "cookidoo": false},
+  {"id": "haricots-sautes", "cat": "plat", "emoji": "🫘", "bg": "#d8a77a", "name": {"fr": "Haricots sautés", "de": "Gebratene Bohnen", "en": "Sautéed beans"}, "time": "30 min", "serves": 4, "desc": {"fr": "Haricots sautés à la tomate, au poivron et aux crevettes, comme à la maison.", "de": "Gebratene Bohnen mit Tomate, Paprika und Garnelen, wie zu Hause.", "en": "Beans sautéed with tomato, green pepper and shrimp, just like home."}, "ing": [{"fr": "Haricots (3 boîtes)", "de": "Bohnen (3 Dosen)", "en": "Beans (3 cans)", "q": "750 g"}, {"fr": "Tomates", "de": "Tomaten", "en": "Tomatoes", "q": "200 g"}, {"fr": "Oignons", "de": "Zwiebeln", "en": "Onions", "q": "80 g"}], "hidden": 8, "steps": 3, "cookidoo": false},
+  {"id": "koki", "cat": "plat", "emoji": "🫘", "bg": "#e9b56f", "name": {"fr": "Koki", "de": "Koki", "en": "Koki"}, "time": "2 h 15", "serves": 6, "desc": {"fr": "Le gâteau de cornille à l'huile rouge, la pâte se fait toute seule au Thermomix.", "de": "Augenbohnenkuchen mit Palmöl, der Teig entsteht ganz von allein im Thermomix.", "en": "Black-eyed pea cake with red palm oil, the batter makes itself in the Thermomix."}, "ing": [{"fr": "Koki (cornille) nettoyé et lavé", "de": "Koki (Augenbohnen), geputzt und gewaschen", "en": "Koki (black-eyed peas), cleaned and washed", "q": "500 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": "535 g"}, {"fr": "Huile rouge", "de": "Palmöl", "en": "Red palm oil", "q": "100 g"}], "hidden": 3, "steps": 4, "cookidoo": false},
+  {"id": "macabo-rapee", "cat": "plat", "emoji": "🥔", "bg": "#e2cfa8", "name": {"fr": "Macabo râpé", "de": "Geriebener Macabo", "en": "Grated macabo"}, "time": "1 h 30", "serves": 4, "desc": {"fr": "Le macabo râpé (ekwang de macabo) en boules, parfait avec la sauce arachide blanche.", "de": "Geriebener Macabo in Kugeln, perfekt zur weißen Erdnusssauce.", "en": "Grated macabo parcels, perfect with white peanut sauce."}, "ing": [{"fr": "Macabos", "de": "Macabo", "en": "Macabo", "q": "500 g"}, {"fr": "Huile", "de": "Öl", "en": "Oil", "q": "100 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": "300 g"}], "hidden": 1, "steps": 4, "cookidoo": false},
+  {"id": "macabos-malaxes", "cat": "plat", "emoji": "🥔", "bg": "#d9c39b", "name": {"fr": "Macabos malaxés", "de": "Gestampfter Macabo", "en": "Mashed macabo"}, "time": "1 h", "serves": 4, "desc": {"fr": "Macabos malaxés à l'huile rouge, au poisson fumé et aux crevettes.", "de": "Gestampfter Macabo mit Palmöl, Räucherfisch und Garnelen.", "en": "Mashed macabo with red palm oil, smoked fish and shrimp."}, "ing": [{"fr": "Macabos", "de": "Macabo", "en": "Macabo", "q": "800 g"}, {"fr": "Oignons", "de": "Zwiebeln", "en": "Onions", "q": "150 g"}, {"fr": "Huile rouge", "de": "Palmöl", "en": "Red palm oil", "q": "100 g"}], "hidden": 6, "steps": 3, "cookidoo": false},
+  {"id": "ndole", "cat": "plat", "emoji": "🥬", "bg": "#a9cf9f", "name": {"fr": "Ndolè", "de": "Ndolè", "en": "Ndolè"}, "time": "1 h 20", "serves": 6, "desc": {"fr": "Le plat national : feuilles de ndolè, arachides et crevettes, sans passer des heures à piler.", "de": "Das Nationalgericht: Ndolè-Blätter, Erdnüsse und Garnelen, ohne stundenlanges Stampfen.", "en": "The national dish: ndolè leaves, peanuts and shrimp, without hours of pounding."}, "ing": [{"fr": "Arachides crues", "de": "Rohe Erdnüsse", "en": "Raw peanuts", "q": "250 g"}, {"fr": "Ndolè bien lavé", "de": "Gut gewaschenes Ndolè", "en": "Well-washed ndolè", "q": "150 g"}, {"fr": "Viande de bœuf bouillie", "de": "Gekochtes Rindfleisch", "en": "Boiled beef", "q": "200 g"}], "hidden": 9, "steps": 4, "cookidoo": false},
+  {"id": "okok", "cat": "plat", "emoji": "🍃", "bg": "#9fc79a", "name": {"fr": "Okok", "de": "Okok", "en": "Okok"}, "time": "3 h", "serves": 6, "desc": {"fr": "L'okok à l'arachide et à l'huile rouge, à servir avec des bâtons de manioc.", "de": "Okok mit Erdnuss und Palmöl, serviert mit Maniokstangen.", "en": "Okok with peanut and red palm oil, served with cassava sticks."}, "ing": [{"fr": "Okok", "de": "Okok", "en": "Okok", "q": "500 g"}, {"fr": "Arachides", "de": "Erdnüsse", "en": "Peanuts", "q": "150 g"}, {"fr": "Huile rouge", "de": "Palmöl", "en": "Red palm oil", "q": "250 g"}], "hidden": 5, "steps": 4, "cookidoo": false},
+  {"id": "piment-epice", "cat": "condiment", "emoji": "🌶️", "bg": "#e98b74", "name": {"fr": "Piment épicé", "de": "Scharfe Chilipaste", "en": "Hot chili paste"}, "time": "", "serves": 0, "desc": null, "ing": [], "hidden": 0, "steps": 0, "cookidoo": false},
+  {"id": "piment-simple", "cat": "condiment", "emoji": "🌶️", "bg": "#f2a38f", "name": {"fr": "Piment simple", "de": "Einfache Chilipaste", "en": "Simple chili paste"}, "time": "20 min", "serves": 0, "yield": {"fr": "1 bocal", "de": "1 Glas", "en": "1 jar"}, "desc": {"fr": "Le piment maison à l'huile, à l'ail et à l'oignon, prêt en 15 minutes.", "de": "Hausgemachte Chilipaste mit Öl, Knoblauch und Zwiebel, fertig in 15 Minuten.", "en": "Homemade chili paste with oil, garlic and onion, ready in 15 minutes."}, "ing": [{"fr": "Piments", "de": "Chilischoten", "en": "Chili peppers", "q": {"fr": "1 paquet (8–12)", "de": "1 Packung (8–12)", "en": "1 pack (8–12)"}}, {"fr": "Oignons", "de": "Zwiebeln", "en": "Onions", "q": "2"}, {"fr": "Huile", "de": "Öl", "en": "Oil", "q": "150 ml"}], "hidden": 4, "steps": 1, "cookidoo": false},
+  {"id": "plantains-piles", "cat": "accomp", "emoji": "🍌", "bg": "#f2dc8a", "name": {"fr": "Plantains pilés", "de": "Gestampfte Kochbananen", "en": "Pounded plantains"}, "time": "1 h 15", "serves": 4, "desc": {"fr": "Plantains verts et mûrs pilés à l'huile de palme et aux haricots.", "de": "Grüne und reife Kochbananen, gestampft mit Palmöl und Bohnen.", "en": "Green and ripe plantains pounded with palm oil and beans."}, "ing": [{"fr": "Plantains verts", "de": "Grüne Kochbananen", "en": "Green plantains", "q": "350 g"}, {"fr": "Plantains mûrs", "de": "Reife Kochbananen", "en": "Ripe plantains", "q": "150 g"}, {"fr": "Huile de palme", "de": "Palmöl", "en": "Palm oil", "q": "80 g"}], "hidden": 3, "steps": 3, "cookidoo": false},
+  {"id": "pommes-pilees", "cat": "accomp", "emoji": "🥔", "bg": "#eadbb5", "name": {"fr": "Pommes pilées", "de": "Gestampfte Kartoffeln", "en": "Pounded potatoes"}, "time": "40 min", "serves": 4, "desc": {"fr": "Pommes de terre pilées à l'huile rouge et aux haricots.", "de": "Gestampfte Kartoffeln mit Palmöl und Bohnen.", "en": "Pounded potatoes with red palm oil and beans."}, "ing": [{"fr": "Pommes de terre", "de": "Kartoffeln", "en": "Potatoes", "q": "750 g"}, {"fr": "Haricots (2 boîtes)", "de": "Bohnen (2 Dosen)", "en": "Beans (2 cans)", "q": "500 g"}, {"fr": "Huile rouge", "de": "Palmöl", "en": "Red palm oil", "q": "70 g"}], "hidden": 3, "steps": 3, "cookidoo": false},
+  {"id": "roti-de-chevre", "cat": "plat", "emoji": "🍖", "bg": "#e3a57f", "img": "img/roti-de-chevre.jpg", "name": {"fr": "Rôti de chèvre", "de": "Ziegenbraten", "en": "Braised goat"}, "time": "50 min", "serves": 4, "desc": {"fr": "Rôti de chèvre aux épices camerounaises (pèbè, 4 côtés) et tomates fraîches.", "de": "Geschmortes Ziegenfleisch mit kamerunischen Gewürzen und frischen Tomaten.", "en": "Braised goat with Cameroonian spices and fresh tomatoes."}, "ing": [{"fr": "Viande de chèvre précuite", "de": "Vorgegartes Ziegenfleisch", "en": "Pre-cooked goat meat", "q": "600 g"}, {"fr": "Oignon", "de": "Zwiebel", "en": "Onion", "q": "100 g"}, {"fr": "Tomates fraîches", "de": "Frische Tomaten", "en": "Fresh tomatoes", "q": "350 g"}], "hidden": 10, "steps": 3, "cookidoo": true},
+  {"id": "roti-de-chevre-v-2", "cat": "plat", "emoji": "🍖", "bg": "#d99a74", "name": {"fr": "Rôti de chèvre V.2", "de": "Ziegenbraten V.2", "en": "Braised goat V.2"}, "time": "1 h 20", "serves": 4, "desc": {"fr": "La version avec viande crue : tout se fait dans le Thermomix, sans précuisson.", "de": "Die Variante mit rohem Fleisch: alles im Thermomix, ohne Vorgaren.", "en": "The raw-meat version: everything in the Thermomix, no pre-cooking."}, "ing": [{"fr": "Viande de chèvre crue en morceaux", "de": "Rohes Ziegenfleisch in Stücken", "en": "Raw goat meat in pieces", "q": "600 g"}, {"fr": "Oignon", "de": "Zwiebel", "en": "Onion", "q": "100 g"}, {"fr": "Tomates fraîches", "de": "Frische Tomaten", "en": "Fresh tomatoes", "q": "350 g"}], "hidden": 10, "steps": 3, "cookidoo": false},
+  {"id": "sauce-arachide", "cat": "sauce", "emoji": "🥜", "bg": "#d9a868", "name": {"fr": "Sauce arachide", "de": "Erdnusssauce", "en": "Peanut sauce"}, "time": "1 h", "serves": 6, "desc": {"fr": "Sauce arachide onctueuse à la pâte d'arachide grillée, avec poisson ou viande.", "de": "Cremige Erdnusssauce aus gerösteter Erdnusspaste, mit Fisch oder Fleisch.", "en": "Creamy peanut sauce from roasted peanut paste, with fish or meat."}, "ing": [{"fr": "Pâte d'arachide", "de": "Erdnusspaste", "en": "Peanut paste", "q": "300 g"}, {"fr": "Poisson frit, bounga ou viande cuite", "de": "Gebratener Fisch, Bounga oder gegartes Fleisch", "en": "Fried fish, bounga or cooked meat", "q": "300 g"}, {"fr": "Oignon", "de": "Zwiebel", "en": "Onion", "q": "80 g"}], "hidden": 5, "steps": 3, "cookidoo": false},
+  {"id": "sauce-arachide-blanche", "cat": "sauce", "emoji": "🥜", "bg": "#ead3a8", "name": {"fr": "Sauce arachide blanche", "de": "Weiße Erdnusssauce", "en": "White peanut sauce"}, "time": "1 h 10", "serves": 4, "desc": {"fr": "Sauce d'arachides fraîches au poisson fumé, l'accompagnement du macabo râpé.", "de": "Sauce aus frischen Erdnüssen mit Räucherfisch, die Begleitung zum geriebenen Macabo.", "en": "Fresh peanut sauce with smoked fish, the classic partner for grated macabo."}, "ing": [{"fr": "Arachides sans peau", "de": "Geschälte Erdnüsse", "en": "Skinless peanuts", "q": "300 g"}, {"fr": "Poisson frit ou fumé", "de": "Gebratener oder geräucherter Fisch", "en": "Fried or smoked fish", "q": {"fr": "4 morceaux", "de": "4 Stücke", "en": "4 pieces"}}, {"fr": "Oignons", "de": "Zwiebeln", "en": "Onions", "q": "200 g"}], "hidden": 8, "steps": 4, "cookidoo": false},
+  {"id": "sauce-gombo", "cat": "sauce", "emoji": "🍲", "bg": "#b8cf94", "name": {"fr": "Sauce gombo", "de": "Okra-Sauce", "en": "Okra sauce"}, "time": "45 min", "serves": 4, "desc": {"fr": "Sauce gombo aux tomates, crevettes et poisson fumé.", "de": "Okra-Sauce mit Tomaten, Garnelen und Räucherfisch.", "en": "Okra sauce with tomatoes, shrimp and smoked fish."}, "ing": [{"fr": "Gombos", "de": "Okraschoten", "en": "Okra", "q": "400 g"}, {"fr": "Oignons", "de": "Zwiebeln", "en": "Onions", "q": "150 g"}, {"fr": "Tomates", "de": "Tomaten", "en": "Tomatoes", "q": "150 g"}], "hidden": 9, "steps": 3, "cookidoo": false},
+  {"id": "sauce-jaune", "cat": "sauce", "emoji": "🍲", "bg": "#f1cf6a", "name": {"fr": "Sauce jaune", "de": "Gelbe Sauce", "en": "Yellow sauce"}, "time": "30 min", "serves": 4, "desc": {"fr": "La sauce jaune qui accompagne le taro, à l'huile rouge et aux condiments.", "de": "Die gelbe Sauce zum Taro, mit Palmöl und Gewürzen.", "en": "The yellow sauce served with taro, made with red palm oil and spices."}, "ing": [{"fr": "Huile rouge", "de": "Palmöl", "en": "Red palm oil", "q": "180 g"}, {"fr": "Condiments du taro", "de": "Taro-Gewürzmischung", "en": "Taro seasoning", "q": {"fr": "4 c. à s.", "de": "4 EL", "en": "4 tbsp"}}, {"fr": "Sel gemme (kanwa)", "de": "Steinsalz (Kanwa)", "en": "Rock salt (kanwa)", "q": "30 g"}], "hidden": 4, "steps": 4, "cookidoo": true},
+  {"id": "sauce-pistache", "cat": "sauce", "emoji": "🍲", "bg": "#e6d29a", "name": {"fr": "Sauce pistache", "de": "Pistache-Sauce", "en": "Pistache sauce"}, "time": "1 h 45", "serves": 4, "desc": {"fr": "Sauce aux graines de pistache (egusi) avec gombo et crevettes.", "de": "Sauce aus Pistache-Kernen (Egusi) mit Okra und Garnelen.", "en": "Pistache (egusi) seed sauce with okra and shrimp."}, "ing": [{"fr": "Pistache (egusi)", "de": "Pistache (Egusi-Kerne)", "en": "Pistache (egusi seeds)", "q": "250 g"}, {"fr": "Tomates", "de": "Tomaten", "en": "Tomatoes", "q": "2"}, {"fr": "Gombo", "de": "Okra", "en": "Okra", "q": "100 g"}], "hidden": 7, "steps": 4, "cookidoo": false},
+  {"id": "semoule", "cat": "accomp", "emoji": "🍚", "bg": "#f0e3c0", "name": {"fr": "Semoule", "de": "Grieß-Fufu", "en": "Semolina fufu"}, "time": "15 min", "serves": 4, "desc": {"fr": "La semoule ferme et lisse, sans grumeaux et sans bras fatigués.", "de": "Fester, glatter Grieß-Fufu, ohne Klümpchen und ohne müde Arme.", "en": "Firm, smooth semolina fufu, no lumps and no tired arms."}, "ing": [{"fr": "Semoule", "de": "Grieß", "en": "Semolina", "q": "400 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": "1,5 l"}], "hidden": 0, "steps": 2, "cookidoo": false},
+  {"id": "taro", "cat": "accomp", "emoji": "🍠", "bg": "#c9b3c9", "img": "img/taro.jpg", "name": {"fr": "Taro pilé", "de": "Gestampfter Taro", "en": "Pounded taro"}, "time": "2 h", "serves": 4, "desc": {"fr": "Taro pilé lisse et élastique, sans piler à la main.", "de": "Glatter, elastischer Taro, ganz ohne Stampfen von Hand.", "en": "Smooth, stretchy pounded taro, no hand pounding needed."}, "ing": [{"fr": "Taro nettoyé", "de": "Geputzter Taro", "en": "Cleaned taro", "q": "1300 g"}, {"fr": "Eau", "de": "Wasser", "en": "Water", "q": {"fr": "1,2 l", "de": "1,2 l", "en": "1.2 l"}}], "hidden": 0, "steps": 2, "cookidoo": true},
+  {"id": "tenue-militaire", "cat": "plat", "emoji": "🍲", "bg": "#a7b48a", "name": {"fr": "Tenue militaire (Tana / Tak)", "de": "Tenue militaire (Tana / Tak)", "en": "Tenue militaire (Tana / Tak)"}, "time": "1 h 15", "serves": 4, "desc": {"fr": "Le gâteau de maïs à l'huile rouge et aux légumes, cuit en papillotes.", "de": "Maiskuchen mit Palmöl und Gemüse, in Päckchen gegart.", "en": "Corn cake with red palm oil and greens, steamed in parcels."}, "ing": [{"fr": "Maïs (boîte ou frais, égoutté)", "de": "Mais (Dose oder frisch, abgetropft)", "en": "Corn (canned or fresh, drained)", "q": "500 g"}, {"fr": "Farine de maïs", "de": "Maismehl", "en": "Maize flour", "q": "150 g"}, {"fr": "Huile rouge", "de": "Palmöl", "en": "Red palm oil", "q": "80 g"}], "hidden": 4, "steps": 3, "cookidoo": false}
+];
+
+/* ============================================================ */
+const T = {
+  fr:{pill:"Recettes Thermomix 100 % camerounaises",h1:"La cuisine de chez nous, <em>simplifiée</em> au Thermomix",
+      lead:"Ndolè, Koki, Eru, Beignets… des recettes testées pas à pas. Regardez l'aperçu, payez et recevez la recette complète en PDF.",
+      s1:"Choisir une recette",s2:"Payer par PayPal ou virement",s3:"Recevoir le PDF par e-mail",
+      all:"Toutes",plat:"Plats",sauce:"Sauces",accomp:"Accompagnements",snack:"Beignets & bouillie",condiment:"Piments & condiments",soon:"Aperçu bientôt disponible",terms:"CGV",legal:"Informations légales",consent:"J'accepte que la recette me soit envoyée avant la fin du délai de rétractation et je sais que je perds ainsi mon droit de rétractation.",consentShort:"Livraison immédiate acceptée, perte du droit de rétractation confirmée.",ppOpen:"Ouvrir PayPal",ppScan:"Ou scannez ce code avec votre téléphone.",qtyL:"Quantité",pers:"pers.",order:"Commande",imprint:"Mentions légales",payment:"Paiement",lv:["Facile","Moyen","Difficile"],cookidoo:"+ Lien Cookidoo : la recette directement sur ton Thermomix",cookBadge:"Cookidoo",soonDesc:"Recette Thermomix testée pas à pas.",buy:"Acheter",see:"Voir la recette",
+      ing:"Ingrédients",prep:"Préparation",unlock:"🔒 Débloquer la recette complète",more:n=>`+ ${n} autres ingrédients`,
+      steps:n=>`${n} étapes détaillées avec réglages Thermomix (temps, température, vitesse)`,
+      incl:["Liste complète des ingrédients","Toutes les étapes avec réglages Thermomix","Astuces et variantes","PDF à imprimer"],
+      payPP:"Payer avec PayPal",payIB:"Payer par virement (IBAN)",back:"← Toutes les recettes",time:"Temps",serves:"Portions",level:"Difficulté",
+      ppTitle:"Paiement PayPal",ppText:"Cliquez sur le bouton : le montant de",ppText2:"est déjà saisi. Indiquez la référence dans le message.",
+      ibTitle:"Paiement par virement",ibText:"Virez le montant avec la référence ci-dessous.",
+      ref:"Référence",amount:"Montant",owner:"Titulaire",bank:"Banque",
+      after:"Après le paiement : où envoyer la recette ?",name:"Nom",mail:"E-mail",send:"J'ai payé – envoyer ma commande",
+      sendNote:"La recette est envoyée en PDF dès réception du paiement (PayPal : le jour même, virement : 1–2 jours ouvrés).",
+      okT:"Merci !",okB:"Envoyez-nous maintenant votre commande :",byMail:"par e-mail",byWa:"par WhatsApp",
+      copied:"copié",copy:"copier",privacy:"Confidentialité",withdraw:"Droit de rétractation"},
+  en:{pill:"100 % Cameroonian Thermomix recipes",h1:"Home-style Cameroonian cooking, <em>made easy</em> with Thermomix",
+      lead:"Ndolè, Koki, Eru, Beignets… tested step by step. See the preview, pay and get the full recipe as a PDF.",
+      s1:"Choose a recipe",s2:"Pay with PayPal or bank transfer",s3:"Receive the PDF by e-mail",
+      all:"All",plat:"Main dishes",sauce:"Sauces",accomp:"Sides",snack:"Beignets & porridge",condiment:"Chili & seasonings",soon:"Preview coming soon",terms:"Terms",legal:"Legal",consent:"I expressly agree that the recipe is delivered before the withdrawal period ends and I know that I thereby lose my right of withdrawal.",consentShort:"Immediate delivery agreed, loss of withdrawal right confirmed.",ppOpen:"Open PayPal",ppScan:"Or scan this code with your phone.",qtyL:"Yield",pers:"servings",order:"Order",imprint:"Imprint",payment:"Payment",lv:["Easy","Medium","Hard"],cookidoo:"+ Cookidoo link: the recipe straight on your Thermomix",cookBadge:"Cookidoo",soonDesc:"Thermomix recipe tested step by step.",buy:"Buy",see:"View recipe",
+      ing:"Ingredients",prep:"Method",unlock:"🔒 Unlock the full recipe",more:n=>`+ ${n} more ingredients`,
+      steps:n=>`${n} detailed steps with Thermomix settings (time, temperature, speed)`,
+      incl:["Complete ingredient list","All steps with Thermomix settings","Tips and variations","Printable PDF"],
+      payPP:"Pay with PayPal",payIB:"Pay by bank transfer (IBAN)",back:"← All recipes",time:"Time",serves:"Servings",level:"Difficulty",
+      ppTitle:"PayPal payment",ppText:"Click the button: the amount of",ppText2:"is already filled in. Add the reference in the message.",
+      ibTitle:"Bank transfer",ibText:"Transfer the amount using the reference below.",
+      ref:"Reference",amount:"Amount",owner:"Account holder",bank:"Bank",
+      after:"After paying: where should we send the recipe?",name:"Name",mail:"E-mail",send:"I have paid – send my order",
+      sendNote:"The recipe is sent as a PDF as soon as payment arrives (PayPal: same day, bank transfer: 1–2 business days).",
+      okT:"Thank you!",okB:"Now send us your order:",byMail:"by e-mail",byWa:"via WhatsApp",
+      copied:"copied",copy:"copy",privacy:"Privacy",withdraw:"Right of withdrawal"},
+  de:{pill:"100 % kamerunische Thermomix-Rezepte",h1:"Die Küche aus der Heimat, <em>einfach</em> im Thermomix",
+      lead:"Ndolè, Koki, Eru, Krapfen… Schritt für Schritt getestet. Vorschau ansehen, bezahlen und das komplette Rezept als PDF erhalten.",
+      s1:"Rezept auswählen",s2:"Per PayPal oder Überweisung zahlen",s3:"PDF per E-Mail erhalten",
+      all:"Alle",plat:"Hauptgerichte",sauce:"Saucen",accomp:"Beilagen",snack:"Krapfen & Brei",condiment:"Chili & Gewürze",soon:"Vorschau folgt in Kürze",terms:"AGB",legal:"Rechtliches",consent:"Ich stimme ausdrücklich zu, dass das Rezept vor Ablauf der Widerrufsfrist geliefert wird, und weiß, dass ich dadurch mein Widerrufsrecht verliere.",consentShort:"Sofortige Lieferung zugestimmt, Verlust des Widerrufsrechts bestätigt.",ppOpen:"PayPal öffnen",ppScan:"Oder scanne diesen Code mit dem Handy.",qtyL:"Menge",pers:"Pers.",order:"Bestellung",imprint:"Impressum",payment:"Zahlung",lv:["Einfach","Mittel","Schwer"],cookidoo:"+ Cookidoo-Link: das Rezept direkt auf deinem Thermomix",cookBadge:"Cookidoo",soonDesc:"Schritt für Schritt getestetes Thermomix-Rezept.",buy:"Kaufen",see:"Rezept ansehen",
+      ing:"Zutaten",prep:"Zubereitung",unlock:"🔒 Komplettes Rezept freischalten",more:n=>`+ ${n} weitere Zutaten`,
+      steps:n=>`${n} ausführliche Schritte mit Thermomix-Einstellungen (Zeit, Temperatur, Stufe)`,
+      incl:["Vollständige Zutatenliste","Alle Schritte mit Thermomix-Einstellungen","Tipps und Varianten","PDF zum Ausdrucken"],
+      payPP:"Mit PayPal bezahlen",payIB:"Per Überweisung (IBAN)",back:"← Alle Rezepte",time:"Zeit",serves:"Portionen",level:"Schwierigkeit",
+      ppTitle:"Zahlung mit PayPal",ppText:"Klick auf den Button: Der Betrag von",ppText2:"ist schon eingetragen. Gib die Referenz in der Nachricht an.",
+      ibTitle:"Zahlung per Überweisung",ibText:"Überweise den Betrag mit der Referenz unten als Verwendungszweck.",
+      ref:"Referenz",amount:"Betrag",owner:"Kontoinhaber",bank:"Bank",
+      after:"Nach der Zahlung: Wohin sollen wir das Rezept schicken?",name:"Name",mail:"E-Mail",send:"Ich habe bezahlt – Bestellung senden",
+      sendNote:"Das Rezept kommt als PDF, sobald die Zahlung da ist (PayPal: am selben Tag, Überweisung: 1–2 Werktage).",
+      okT:"Danke!",okB:"Schick uns jetzt deine Bestellung:",byMail:"per E-Mail",byWa:"per WhatsApp",
+      copied:"kopiert",copy:"kopieren",privacy:"Datenschutz",withdraw:"Widerrufsbelehrung"}
+};
+/* ============================================================
+   RECHTLICHES – Entwürfe, bitte rechtlich prüfen lassen.
+   [eckige Klammern] = noch auszufüllen
+   ============================================================ */
+const ADDR = "Laurence Monkam<br>Riedstadt (Rhein-Main)<br>Deutschland";
+const ADDR_FR = "Laurence Monkam<br>Riedstadt (Rhein-Main)<br>Allemagne";
+const ADDR_EN = "Laurence Monkam<br>Riedstadt (Rhein-Main)<br>Germany";
+const LEGAL = {
+de:{
+imprint:`<h4>Angaben gemäß § 5 DDG</h4>
+<p>${ADDR}</p>
+<h4>Kontakt</h4>
+<p>E-Mail: bellmarion2020@gmail.com<br>Telefon / WhatsApp: +49 171 8267492</p>
+<h4>Verantwortlich für den Inhalt</h4>
+<p>Laurence Monkam, Anschrift wie oben.</p>
+<h4>Verbraucherstreitbeilegung</h4>
+<p>Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+<h4>Marken</h4>
+<p>Thermomix® und Cookidoo® sind eingetragene Marken der Vorwerk-Gruppe. Diese Seite ist ein unabhängiges Angebot und steht in keiner Verbindung zu Vorwerk.</p>`,
+privacy:`<h4>1. Verantwortliche</h4>
+<p>${ADDR}<br>E-Mail: bellmarion2020@gmail.com</p>
+<h4>2. Welche Daten wir verarbeiten</h4>
+<p>Beim Besuch der Seite verarbeitet unser Hosting-Anbieter technisch notwendige Daten (z. B. IP-Adresse, Zeitpunkt, aufgerufene Seite), um die Seite auszuliefern. Wenn du ein Rezept bestellst, verarbeiten wir deinen Namen, deine E-Mail-Adresse, das bestellte Rezept, die Referenznummer und die Zahlungsart, um die Bestellung abzuwickeln und dir das Rezept zu schicken (Art. 6 Abs. 1 lit. b DSGVO). Rechnungsdaten bewahren wir so lange auf, wie es das Steuer- und Handelsrecht verlangt (Art. 6 Abs. 1 lit. c DSGVO).</p>
+<h4>3. Weitergabe an Dienste</h4>
+<p><b>Hosting:</b> Die Seite wird über Anthropic (claude.ai) bereitgestellt. <b>PayPal:</b> Wenn du mit PayPal zahlst, gelten zusätzlich die Datenschutzbestimmungen der PayPal (Europe) S.à r.l. et Cie, S.C.A. <b>Banküberweisung:</b> Deine Bank und unsere Bank verarbeiten die Überweisungsdaten. <b>WhatsApp:</b> Wenn du deine Bestellung per WhatsApp schickst, verarbeitet WhatsApp (Meta Platforms Ireland Ltd.) deine Nachricht. <b>E-Mail:</b> Bestellungen per E-Mail laufen über unseren E-Mail-Anbieter (Google).</p>
+<h4>4. Speicherung im Browser</h4>
+<p>Die Seite merkt sich deine gewählte Sprache im Speicher deines Browsers (localStorage). Es werden keine Tracking- oder Werbe-Cookies gesetzt und keine externen Schriftarten geladen.</p>
+<h4>5. Deine Rechte</h4>
+<p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Schreib uns dafür eine E-Mail. Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren, z. B. beim Hessischen Beauftragten für Datenschutz und Informationsfreiheit.</p>`,
+withdraw:`<h4>Widerrufsrecht</h4>
+<p>Du hast das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses. Um dein Widerrufsrecht auszuüben, musst du uns (Laurence Monkam, Riedstadt (Rhein-Main), E-Mail: bellmarion2020@gmail.com) mittels einer eindeutigen Erklärung (z. B. per E-Mail) über deinen Entschluss informieren. Zur Wahrung der Frist reicht es aus, dass du die Mitteilung vor Ablauf der Frist absendest.</p>
+<h4>Folgen des Widerrufs</h4>
+<p>Wenn du diesen Vertrag widerrufst, zahlen wir dir alle Zahlungen unverzüglich und spätestens binnen vierzehn Tagen zurück, über dasselbe Zahlungsmittel, das du verwendet hast.</p>
+<h4>Vorzeitiges Erlöschen des Widerrufsrechts</h4>
+<p>Das Widerrufsrecht erlischt bei digitalen Inhalten (Rezept als PDF bzw. Cookidoo-Link), wenn wir mit der Lieferung begonnen haben, nachdem du ausdrücklich zugestimmt hast, dass wir vor Ablauf der Widerrufsfrist liefern, und du bestätigt hast, dass du dadurch dein Widerrufsrecht verlierst.</p>
+<h4>Muster-Widerrufsformular</h4>
+<p>An Laurence Monkam, Riedstadt (Rhein-Main), bellmarion2020@gmail.com: Hiermit widerrufe(n) ich/wir den von mir/uns abgeschlossenen Vertrag über den Kauf des folgenden digitalen Inhalts: … / Bestellt am: … / Name: … / Anschrift: … / Datum: …</p>`,
+terms:`<h4>1. Geltungsbereich</h4>
+<p>Diese Bedingungen gelten für den Kauf von Thermomix-Rezepten (PDF, ggf. mit Cookidoo-Link) über diese Seite. Verkäuferin ist Laurence Monkam (siehe Impressum).</p>
+<h4>2. Vertragsschluss</h4>
+<p>Die Rezepte auf der Seite sind eine Einladung zum Kauf. Mit dem Absenden deiner Bestellung nach der Zahlung gibst du ein Angebot ab. Der Vertrag kommt zustande, wenn wir dir das Rezept zusenden.</p>
+<h4>3. Preise und Zahlung</h4>
+<p>Der Preis pro Rezept beträgt 5,00 € (Endpreis). Du zahlst per PayPal oder Banküberweisung im Voraus.</p>
+<h4>4. Lieferung</h4>
+<p>Das Rezept wird nach Zahlungseingang per E-Mail (oder WhatsApp) als PDF geliefert, bei PayPal in der Regel am selben Tag, bei Überweisung nach 1–2 Werktagen.</p>
+<h4>5. Nutzungsrecht</h4>
+<p>Du erhältst ein einfaches Nutzungsrecht für den privaten Gebrauch. Weitergabe, Veröffentlichung oder Weiterverkauf der Rezepte (auch des Cookidoo-Links) sind nicht erlaubt.</p>
+<h4>6. Widerruf</h4>
+<p>Siehe Widerrufsbelehrung.</p>`
+},
+fr:{
+imprint:`<h4>Informations légales (§ 5 DDG, droit allemand)</h4>
+<p>${ADDR_FR}</p>
+<h4>Contact</h4>
+<p>E-mail : bellmarion2020@gmail.com<br>Téléphone / WhatsApp : +49 171 8267492</p>
+<h4>Responsable du contenu</h4>
+<p>Laurence Monkam, adresse ci-dessus.</p>
+<h4>Règlement des litiges</h4>
+<p>Nous ne participons pas à des procédures de règlement des litiges devant un organisme de médiation de la consommation.</p>
+<h4>Marques</h4>
+<p>Thermomix® et Cookidoo® sont des marques déposées du groupe Vorwerk. Ce site est indépendant et n'a aucun lien avec Vorwerk.</p>`,
+privacy:`<h4>1. Responsable</h4>
+<p>${ADDR_FR}<br>E-mail : bellmarion2020@gmail.com</p>
+<h4>2. Données traitées</h4>
+<p>Lors de la visite du site, notre hébergeur traite les données techniques nécessaires (adresse IP, heure, page consultée) pour afficher le site. Lors d'une commande, nous traitons ton nom, ton e-mail, la recette commandée, la référence et le mode de paiement pour exécuter la commande et t'envoyer la recette (art. 6, al. 1, let. b RGPD). Les données de facturation sont conservées pendant la durée exigée par la loi (art. 6, al. 1, let. c RGPD).</p>
+<h4>3. Services utilisés</h4>
+<p><b>Hébergement :</b> Anthropic (claude.ai). <b>PayPal :</b> la politique de confidentialité de PayPal (Europe) S.à r.l. et Cie, S.C.A. s'applique. <b>Virement :</b> ta banque et la nôtre traitent les données du virement. <b>WhatsApp :</b> si tu commandes par WhatsApp, ton message est traité par WhatsApp (Meta Platforms Ireland Ltd.). <b>E-mail :</b> les commandes par e-mail passent par notre fournisseur (Google).</p>
+<h4>4. Stockage dans le navigateur</h4>
+<p>Le site mémorise la langue choisie dans ton navigateur (localStorage). Aucun cookie de suivi ou publicitaire, aucune police externe.</p>
+<h4>5. Tes droits</h4>
+<p>Tu as le droit d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition. Il suffit de nous écrire. Tu peux aussi saisir une autorité de protection des données.</p>`,
+withdraw:`<h4>Droit de rétractation</h4>
+<p>Tu disposes de quatorze jours à compter de la conclusion du contrat pour te rétracter sans donner de motif. Pour l'exercer, informe-nous (Laurence Monkam, Riedstadt (Rhein-Main), Allemagne, e-mail : bellmarion2020@gmail.com) par une déclaration claire, par exemple par e-mail. Il suffit d'envoyer ta déclaration avant la fin du délai.</p>
+<h4>Effets de la rétractation</h4>
+<p>En cas de rétractation, nous te remboursons sans délai, au plus tard sous quatorze jours, avec le même moyen de paiement.</p>
+<h4>Perte du droit de rétractation</h4>
+<p>Pour les contenus numériques (recette en PDF ou lien Cookidoo), le droit de rétractation prend fin dès le début de la livraison, si tu as expressément accepté une livraison avant la fin du délai et confirmé savoir que tu perds ainsi ton droit de rétractation.</p>`,
+terms:`<h4>1. Champ d'application</h4>
+<p>Ces conditions s'appliquent à l'achat de recettes Thermomix (PDF, avec lien Cookidoo le cas échéant) sur ce site. Vendeuse : Laurence Monkam (voir mentions légales).</p>
+<h4>2. Conclusion du contrat</h4>
+<p>Les recettes présentées sont une invitation à acheter. En envoyant ta commande après paiement, tu fais une offre. Le contrat est conclu lorsque nous t'envoyons la recette.</p>
+<h4>3. Prix et paiement</h4>
+<p>Prix par recette : 5,00 € (prix final), payable d'avance par PayPal ou virement.</p>
+<h4>4. Livraison</h4>
+<p>La recette est envoyée en PDF par e-mail (ou WhatsApp) après réception du paiement : en général le jour même avec PayPal, 1–2 jours ouvrés par virement.</p>
+<h4>5. Droit d'utilisation</h4>
+<p>Tu obtiens un droit d'utilisation privé. Il est interdit de partager, publier ou revendre les recettes (y compris le lien Cookidoo).</p>
+<h4>6. Rétractation</h4>
+<p>Voir le droit de rétractation.</p>`
+},
+en:{
+imprint:`<h4>Legal notice (§ 5 DDG, German law)</h4>
+<p>${ADDR_EN}</p>
+<h4>Contact</h4>
+<p>Email: bellmarion2020@gmail.com<br>Phone / WhatsApp: +49 171 8267492</p>
+<h4>Responsible for content</h4>
+<p>Laurence Monkam, address as above.</p>
+<h4>Dispute resolution</h4>
+<p>We are neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration board.</p>
+<h4>Trademarks</h4>
+<p>Thermomix® and Cookidoo® are registered trademarks of the Vorwerk group. This site is independent and not affiliated with Vorwerk.</p>`,
+privacy:`<h4>1. Controller</h4>
+<p>${ADDR_EN}<br>Email: bellmarion2020@gmail.com</p>
+<h4>2. Data we process</h4>
+<p>When you visit the site, our hosting provider processes technically necessary data (IP address, time, page requested) to deliver it. When you order, we process your name, email address, the recipe ordered, the reference and the payment method to fulfil the order and send you the recipe (Art. 6(1)(b) GDPR). Billing records are kept as long as tax and commercial law require (Art. 6(1)(c) GDPR).</p>
+<h4>3. Services used</h4>
+<p><b>Hosting:</b> Anthropic (claude.ai). <b>PayPal:</b> the privacy policy of PayPal (Europe) S.à r.l. et Cie, S.C.A. also applies. <b>Bank transfer:</b> your bank and ours process the transfer data. <b>WhatsApp:</b> if you order via WhatsApp, your message is processed by WhatsApp (Meta Platforms Ireland Ltd.). <b>Email:</b> orders by email go through our email provider (Google).</p>
+<h4>4. Browser storage</h4>
+<p>The site remembers your chosen language in your browser (localStorage). No tracking or advertising cookies, no external fonts.</p>
+<h4>5. Your rights</h4>
+<p>You have the right of access, rectification, erasure, restriction, data portability and objection. Just email us. You can also lodge a complaint with a data protection authority.</p>`,
+withdraw:`<h4>Right of withdrawal</h4>
+<p>You may withdraw from this contract within fourteen days of its conclusion without giving any reason. To do so, inform us (Laurence Monkam, Riedstadt (Rhein-Main), Germany, email: bellmarion2020@gmail.com) with a clear statement, e.g. by email. Sending the statement before the deadline is enough.</p>
+<h4>Effects of withdrawal</h4>
+<p>If you withdraw, we refund all payments without delay and at the latest within fourteen days, using the same payment method.</p>
+<h4>Early expiry</h4>
+<p>For digital content (recipe PDF or Cookidoo link), the right of withdrawal expires once delivery has begun, if you expressly agreed to delivery before the end of the withdrawal period and confirmed that you thereby lose your right of withdrawal.</p>`,
+terms:`<h4>1. Scope</h4>
+<p>These terms apply to the purchase of Thermomix recipes (PDF, with a Cookidoo link where available) on this site. Seller: Laurence Monkam (see legal notice).</p>
+<h4>2. Contract</h4>
+<p>The recipes shown are an invitation to buy. By sending your order after payment you make an offer. The contract is concluded when we send you the recipe.</p>
+<h4>3. Prices and payment</h4>
+<p>Price per recipe: €5.00 (final price), paid in advance by PayPal or bank transfer.</p>
+<h4>4. Delivery</h4>
+<p>The recipe is sent as a PDF by email (or WhatsApp) once payment is received: usually the same day with PayPal, 1–2 business days by bank transfer.</p>
+<h4>5. Licence</h4>
+<p>You receive a simple licence for private use. Sharing, publishing or reselling the recipes (including the Cookidoo link) is not permitted.</p>
+<h4>6. Withdrawal</h4>
+<p>See the right of withdrawal.</p>`
+}};
+
+let L = "fr", cat = "all", current = null;
+const $ = s => document.querySelector(s);
+const eur = n => L==="en" ? "€" + n.toFixed(2) : n.toFixed(2).replace(".", ",") + " €";
+const t = k => T[L][k];
+
+function applyStatic(){
+  document.documentElement.lang = L;
+  document.querySelectorAll("[data-t]").forEach(el => el.innerHTML = t(el.dataset.t));
+  document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.l === L));
+}
+function renderFilters(){
+  $("#filters").innerHTML = ["all","plat","sauce","accomp","snack","condiment"].map(c =>
+    `<button class="${c===cat?"on":""}" data-c="${c}">${t(c)}</button>`).join("");
+  $("#filters").querySelectorAll("button").forEach(b => b.onclick = () => {cat=b.dataset.c; renderFilters(); renderGrid();});
+}
+function renderGrid(){
+  $("#grid").innerHTML = RECIPES.filter(r => cat==="all"||r.cat===cat).map(r => `
+    <button class="card" data-id="${r.id}">
+      <div class="thumb" style="background:${r.bg};position:relative">${r.img?`<img src="${r.img}" alt="${nm(r)}" loading="lazy">`:r.emoji}${r.cookidoo?`<span style="position:absolute;top:10px;right:10px;background:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--green)">✓ ${t("cookBadge")}</span>`:""}</div>
+      <div class="body">
+        <h3>${nm(r)}</h3>
+        <div class="meta">${r.time?`⏱ ${r.time} · 👥 ${srv(r)} · ${t("lv")[levelOf(r)-1]}`:t(r.cat)}</div>
+        <div class="meta">${dsc(r)}</div>
+        <div class="foot"><span class="price">${eur(SHOP.price)}</span><span class="cta">${t("see")}</span></div>
+      </div>
+    </button>`).join("");
+  $("#grid").querySelectorAll(".card").forEach(c => c.onclick = () => openRecipe(c.dataset.id));
+}
+/* Schwierigkeit: bis 1 h = einfach, 1–2 h = mittel, über 2 h = schwer.
+   Mehr als 7 Schritte = mindestens mittel, mehr als 10 Schritte = schwer. */
+function minutesOf(s){ if(!s) return 0; let m=0; const h=s.match(/(\d+(?:[.,]\d+)?)\s*h/); if(h) m+=parseFloat(h[1].replace(",","."))*60;
+  const mm=s.match(/(\d+)\s*min/)||s.match(/h\s*(\d+)$/); if(mm) m+=parseInt(mm[1]); return m; }
+function levelOf(r){ const m=minutesOf(r.time); if(!m) return 0; let l=m<=60?1:m<=120?2:3; const st=r.steps||0; if(st>10) l=3; else if(st>7) l=Math.max(l,2); return l; }
+const nm = r => (L!=="fr" && r.name[L] && r.name[L]!==r.name.fr) ? `${r.name[L]} (${r.name.fr})` : r.name.fr;
+const dsc = r => (r.desc && r.desc[L]) || t("soonDesc");
+const qty = q => typeof q==="object" ? q[L] : q;
+const srv = r => r.yield ? r.yield[L] : (r.serves ? `${r.serves} ${t("pers")}` : "");
+function ghostLines(n){ let s=""; for(let i=0;i<n;i++) s+=`<li><span class="ln" style="width:${40+((i*37)%45)}%"></span><span class="ln" style="width:50px"></span></li>`; return s; }
+function openRecipe(id){
+  current = RECIPES.find(r => r.id===id); if(!current) return;
+  const r = current;
+  location.hash = r.id;
+  $("#home").style.display="none"; $("#detail").style.display="block"; window.scrollTo(0,0);
+  const lv=levelOf(r); const stars = lv?"●".repeat(lv)+"○".repeat(3-lv)+" "+t("lv")[lv-1]:"–"; const hid=r.hidden||6, stp=r.steps||6;
+  let ghostSteps=""; for(let i=0;i<Math.min(stp,5);i++) ghostSteps+=`<div class="ghost-step"><span class="n"></span><div class="t"><div class="ln" style="width:90%"></div><div class="ln" style="width:${55+i*7}%"></div></div></div>`;
+  $("#detail").innerHTML = `
+    <button class="back" id="back">${t("back")}</button>
+    <div class="detail">
+      <div>
+        <div class="d-hero" style="background:${r.bg}">${r.img?`<img src="${r.img}" alt="${nm(r)}">`:r.emoji}</div>
+        <h1>${nm(r)}</h1>
+        <p class="desc">${dsc(r)}</p>
+        <div class="facts">
+          <div class="fact">${t("time")}<b>${r.time||"–"}</b></div>
+          <div class="fact">${r.yield?t("qtyL"):t("serves")}<b>${srv(r)||"–"}</b></div>
+          <div class="fact">${t("level")}<b>${stars}</b></div>
+        </div>
+        <div class="section">
+          <h2>${t("ing")}</h2>
+          <ul class="ing">
+            ${r.ing.length?r.ing.map(i=>`<li><span>${i[L]}</span><span>${qty(i.q)}</span></li>`).join(""):`<li><span style="color:var(--muted)">${t("soon")}</span><span></span></li>`}
+          </ul>
+          ${(r.ing.length && !r.hidden)?"":`<div class="locked box" style="margin-top:-1px">
+            <ul class="ing ghost" style="border:0">${ghostLines(hid)}</ul>
+            <div class="lock-over"><div>${r.hidden?t("more")(r.hidden):t("unlock")}</div></div>
+          </div>`}
+        </div>
+        <div class="section">
+          <h2>${t("prep")}</h2>
+          <div class="locked box">
+            <div class="ghost">${ghostSteps}</div>
+            <div class="lock-over"><div>${t("unlock")}<br><span style="font-weight:400;color:var(--muted);font-size:14px">${r.steps?t("steps")(r.steps):""}</span></div></div>
+          </div>
+        </div>
+      </div>
+      <aside class="buy">
+        <div class="meta">${nm(r)}</div>
+        <div class="big">${eur(SHOP.price)}</div>
+        <ul>${t("incl").map(x=>`<li>${x}</li>`).join("")}${r.cookidoo?`<li><b>${t("cookidoo")}</b></li>`:""}</ul>
+        <button class="btn btn-pp" id="bpp">🅿️ ${t("payPP")}</button>
+        <button class="btn btn-iban" id="bib">🏦 ${t("payIB")}</button>
+      </aside>
+    </div>`;
+  $("#back").onclick = showHome;
+  $("#bpp").onclick = () => openPay("pp");
+  $("#bib").onclick = () => openPay("iban");
+}
+function showHome(){
+  current=null; history.replaceState(null,"",location.pathname);
+  $("#detail").style.display="none"; $("#home").style.display="block";
+}
+function refCode(){ return "REZ-" + current.id.toUpperCase().slice(0,8) + "-" + Math.random().toString(36).slice(2,6).toUpperCase(); }
+function row(k,v,copy){ return `<div><span>${k}</span><b>${v}${copy?` <button class="copy" data-c="${v}">${t("copy")}</button>`:""}</b></div>`; }
+function openPay(kind){
+  const r=current, ref=refCode(), amt=eur(SHOP.price);
+  const ppUrl=SHOP.paypalMe ? `https://www.paypal.me/${encodeURIComponent(SHOP.paypalMe)}/${SHOP.price}EUR` : SHOP.paypalUrl;
+  const top = kind==="pp"
+    ? `<h3>${t("ppTitle")}</h3><p class="meta">${t("ppText")} <b>${amt}</b> ${t("ppText2")}</p>
+       <div class="kv">${row(t("ref"),ref,true)}${row(t("amount"),amt)}</div>
+       <a class="btn btn-pp" href="${ppUrl}" target="_blank" rel="noopener">🅿️ ${t("ppOpen")}</a>
+       <div style="text-align:center;margin-top:12px"><img src="${SHOP.paypalQr}" alt="PayPal QR" style="width:150px;height:150px;border-radius:10px;border:1px solid var(--line)"><p class="note" style="margin-top:4px">${t("ppScan")}</p></div>`
+    : `<h3>${t("ibTitle")}</h3><p class="meta">${t("ibText")}</p>
+       <div class="kv">${row(t("owner"),SHOP.ibanOwner)}${row("IBAN",SHOP.iban,true)}${row("BIC",SHOP.bic,true)}${row(t("bank"),SHOP.bank)}${row(t("amount"),amt)}${row(t("ref"),ref,true)}</div>`;
+  $("#sheet").innerHTML = `<button class="x" id="cls" aria-label="close">×</button>${top}
+    <form id="ord">
+      <p style="font-weight:700;margin:20px 0 0">${t("after")}</p>
+      <label>${t("name")}<input id="oname" required autocomplete="name"></label>
+      <label>${t("mail")}<input id="omail" type="email" required autocomplete="email"></label>
+      <label class="consent"><input type="checkbox" id="oconsent" required><span>${t("consent")} <a href="#" id="wlink">${t("withdraw")}</a></span></label>
+      <button class="btn btn-iban" type="submit">${t("send")}</button>
+      <p class="note">${t("sendNote")}</p>
+    </form><div id="done"></div>`;
+  $("#modal").classList.add("open");
+  $("#cls").onclick = closeModal;
+  $("#sheet").querySelectorAll(".copy").forEach(b => b.onclick = async () => {
+    try{ await navigator.clipboard.writeText(b.dataset.c); b.textContent=t("copied"); }catch(e){}
+  });
+  $("#wlink").onclick = e => { e.preventDefault(); openLegal("withdraw"); };
+  $("#ord").onsubmit = e => {
+    e.preventDefault();
+    const name=$("#oname").value.trim(), mail=$("#omail").value.trim();
+    const msg=`${t("order")}: ${nm(r)}\n${t("ref")}: ${ref}\n${t("amount")}: ${amt}\n${t("payment")}: ${kind==="pp"?"PayPal":"IBAN"}\n${t("name")}: ${name}\n${t("mail")}: ${mail}\n${t("consentShort")}`;
+    const mailto=`mailto:${SHOP.email}?subject=${encodeURIComponent(t("order")+" "+nm(r)+" – "+ref)}&body=${encodeURIComponent(msg)}`;
+    const wa=`https://wa.me/${SHOP.whatsapp}?text=${encodeURIComponent(msg)}`;
+    $("#ord").style.display="none";
+    $("#done").innerHTML = `<div class="ok"><b>${t("okT")}</b> ${t("okB")}
+      <a class="btn btn-iban" href="${mailto}">✉️ ${t("byMail")}</a>
+      <a class="btn btn-ghost" href="${wa}" target="_blank" rel="noopener">💬 ${t("byWa")}</a>
+      <p class="note">${SHOP.email}</p></div>`;
+  };
+}
+function closeModal(){ $("#modal").classList.remove("open"); }
+function openLegal(kind){
+  kind = kind || "imprint";
+  const tabs=["imprint","privacy","withdraw","terms"].map(k=>`<button data-k="${k}" class="${k===kind?"on":""}">${t(k)}</button>`).join("");
+  $("#sheet").innerHTML = `<button class="x" id="cls" aria-label="close">×</button><h3>${t("legal")}</h3><div class="tabs">${tabs}</div><div class="legal">${LEGAL[L][kind]}</div>`;
+  $("#modal").classList.add("open"); $("#cls").onclick = closeModal;
+  $("#sheet").querySelectorAll(".tabs button").forEach(b => b.onclick = () => openLegal(b.dataset.k));
+}
+document.querySelectorAll("[data-legal]").forEach(a => a.onclick = e => { e.preventDefault(); openLegal(a.dataset.legal); });
+$("#modal").onclick = e => { if(e.target.id==="modal") closeModal(); };
+document.querySelectorAll(".lang button").forEach(b => b.onclick = () => {
+  L=b.dataset.l; try{localStorage.setItem("lang",L)}catch(e){}
+  applyStatic(); renderFilters(); renderGrid(); if(current) openRecipe(current.id);
+});
+function route(){ const id=location.hash.slice(1); if(id && RECIPES.some(r=>r.id===id)) openRecipe(id); else showHome(); }
+const nl=(navigator.language||"").slice(0,2); if(T[nl]) L=nl;
+try{ const s=localStorage.getItem("lang"); if(s && T[s]) L=s; }catch(e){}
+$("#yr").textContent = new Date().getFullYear();
+applyStatic(); renderFilters(); renderGrid(); route();
+window.addEventListener("hashchange", route);
+</script>
+</body>
+</html>
